@@ -50,6 +50,6 @@
     "webpack-cli": "^5.0.0"
   },
   "dependencies": {
-    "openai": "^3.1.0"
+    "chatgpt": "^3.2.4"
   }
 }

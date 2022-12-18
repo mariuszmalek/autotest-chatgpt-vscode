@@ -1,5 +1,5 @@
-import * as openai from 'openai';
 import * as vscode from 'vscode';
+import { ChatGPTAPIBrowser } from 'chatgpt';
 
 export function activate(context: vscode.ExtensionContext) {
   // Create a command that generates unit tests using ChatGPT
@@ -19,29 +19,20 @@ export function activate(context: vscode.ExtensionContext) {
       });
 
       // Use ChatGPT to generate the unit test code
-      openai.api.engine(
-        'chatbot',
-        {
-          prompt: `Write a unit test for ${input}`,
-        },
-        (error, response) => {
-          // Handle errors
-          if (error) {
-            vscode.window.showErrorMessage(error.message);
-            return;
-          }
-
-          // Get the generated unit test code
-          const unitTestCode = response.data.replies[0];
-
-          // Create a new file and write the unit test code to it
-          vscode.workspace.openTextDocument({ language: 'typescript' }).then((doc) => {
-            const edit = new vscode.WorkspaceEdit();
-            edit.insert(doc.uri, new vscode.Position(0, 0), unitTestCode);
-            vscode.workspace.applyEdit(edit);
-          });
-        }
-      );
+      const api = new ChatGPTAPIBrowser({
+        email: '',//process.env.OPENAI_EMAIL,
+        password: ''//process.env.OPENAI_PASSWORD
+      })
+      await api.initSession()
+      
+      const result = await api.sendMessage(`Write a unit test for ${input}`)
+      // console.log(result.response)
+      // const unitTestCode = response.data.replies[0];
+      vscode.workspace.openTextDocument({ language: 'typescript' }).then((doc) => {
+        const edit = new vscode.WorkspaceEdit();
+        edit.insert(doc.uri, new vscode.Position(0, 0), result.response);
+        vscode.workspace.applyEdit(edit);
+      });
     }
   );
 
