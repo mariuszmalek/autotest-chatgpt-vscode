@@ -1,4 +1,4 @@
-# ChatGPT Unit Test Generator
+# Autotest - ChatGPT
 
 This extension allows you to generate unit tests for your TypeScript code using ChatGPT. Simply provide the name of a class or function, and ChatGPT will generate a unit test for it.
 
