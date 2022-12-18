@@ -6,6 +6,13 @@ export function activate(context: vscode.ExtensionContext) {
   let disposable = vscode.commands.registerCommand(
     'extension.generateUnitTests',
     async () => {
+      // Get the current editor
+      const editor = vscode.window.activeTextEditor;
+      if (!editor) {
+        vscode.window.showErrorMessage('No active editor');
+        return;
+      }
+      
       // Prompt the user for input (e.g. the name of a class or function to create a unit test for)
       const input = await vscode.window.showInputBox({
         placeHolder: 'Enter the name of a class or function',
